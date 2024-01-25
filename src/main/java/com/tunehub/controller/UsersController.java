@@ -30,39 +30,39 @@ public class UsersController {
 			System.out.println("user already exists");
 		}
 		model.addAttribute("msg", msg);
-		
+
 		return "home";
 	}
 
 	@PostMapping("/validate")
-	public String validate(@RequestParam("email") String email, @RequestParam("password") String password,Model model,HttpSession session) {
-		
+	public String validate(@RequestParam("email") String email, @RequestParam("password") String password, Model model,
+			HttpSession session) {
+
 		String msg;
-		if (service.emailExists(email) == true) {
-			if (service.validateUser(email, password) == true) {
-				String role = service.getRole(email);
-				session.setAttribute("email", email);
-				if (role.equals("admin")) {
-					return "adminHome";
-				} else {
-					return "customerHome";
-				}
+
+		if (service.validateUser(email, password) == true) {
+			String role = service.getRole(email);
+			session.setAttribute("email", email);
+			if (role.equals("admin")) {
+				return "adminHome";
 			} else {
-				msg="Incorrect password";
-				model.addAttribute("msg" ,msg);
-				return "login";
+				Users user = service.getUser(email);
+				boolean userStatus = user.isPremium();
+				model.addAttribute("isPremium", userStatus);
+				return "customerHome";
 			}
+
 		} else {
-			msg="Email is not register";
-			model.addAttribute("msg" ,msg);
+			msg = "Email is not register";
+			model.addAttribute("msg", msg);
 			return "login";
 		}
 	}
-	
+
 	@GetMapping("/logout")
-	public String logout(HttpSession session){
+	public String logout(HttpSession session) {
 		session.invalidate();
 		return "login";
 	}
-	
+
 }

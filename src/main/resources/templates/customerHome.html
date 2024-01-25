@@ -6,7 +6,23 @@
 </head>
 <body>
 <h1>Customer Home</h1>
-<a href="pay">Get-Premium</a>
-<a href="logout">LOG-OUT</a>
+
+<div th:unless="${isPremium}" class="msg">
+ 			<div class="msgbody">Dear Customer !</div>
+ 			
+ 			<div class="anchors"><!-- <a href="playSongs">Click here to Play a Songs</a> -->
+ 				<a href="pay">Get premium</a>
+ 				<br>
+ 				<a href="logout">Logout</a>
+ 			</div>
+ 		</div>
+ 		<div th:if="${isPremium}" class="msg">
+ 			<div class="msgbody">Dear Customer !</div>
+ 			<div class="anchors">
+ 				<a href="viewSongs">Click here to View all Songs</a><br>
+ 				<a href="viewPlaylists">Click here to view all Playlists</a>
+ 				</div>
+ 		</div>
+
 </body>
 </html>
